@@ -54,6 +54,21 @@ async function run(){
       res.send(result);
     })
 
+    app.get('/items', async(req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = likedItemsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    //item deletion
+    app.delete('/items/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const result = await likedItemsCollection.deleteOne(query);
+      res.send(result);
+    })
   
    }
    finally{
