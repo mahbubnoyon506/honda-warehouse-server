@@ -17,6 +17,7 @@ async function run(){
 
   await client.connect();
   const productsCollection=client.db('CarAccessories').collection('parts');
+  const likedItemsCollection = client.db('LikedItems').collection('items')
 
    try{
     app.get('/products', async(req, res) => {
@@ -46,6 +47,12 @@ async function run(){
       res.send(result);
     })
 
+    //// Visitor loved item
+    app.post('/items', async(req, res) => {
+      const newItem = req.body;
+      const result = await likedItemsCollection.insertOne(newItem);
+      res.send(result);
+    })
 
   
    }
