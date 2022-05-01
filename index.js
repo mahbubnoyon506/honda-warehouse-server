@@ -63,20 +63,27 @@ async function run(){
       const result = await productsCollection.deleteOne(query);
       res.send(result);
     })
+
     //update 
-    app.put('/products/:id', async (req, res) => {
+    app.put('/products/:id', async(req, res) => {
       const id = req.params.id;
       const data = req.body;
-      const query = { _id: ObjectId(id) };
-      const options = { upsert: true };
+      const query = {_id: ObjectId(id)};
+      const options = {upsert: true};
       const updateDoc = {
-          $set: {
-              ...data
-          }
+        $set: {
+          // name: data.name,
+          // img: data.img,
+          // price: data.price,
+          quantity: data.quantity,
+          // suppliar: data.suppliar,
+          // description: data.description  
+        }
       };
-      const result = await serviceCollection.updateOne(query, updateDoc, options);
+      const result = await productsCollection.updateOne(query, updateDoc, options);
       res.send(result);
-  })
+    })
+
     //// Visitor loved item
     app.post('/items', async(req, res) => {
       const newItem = req.body;
