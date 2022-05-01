@@ -9,21 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-function verifyJWT(req, res, next){
-  const authHeader = req.headers.authorization;
-  if(!authHeader){
-    return res.status(401).send({message: 'Unauthorized Access'})
-  }
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
-    if(err){
-      return res.status(403).send({message: 'Your access is forbidden'});
-    }
-    req.decoded = decoded;
-    // console.log('decoded', decoded);
-    next()
-  }) 
-}
+// function verifyJWT(req, res, next){
+//   const authHeader = req.headers.authorization;
+//   if(!authHeader){
+//     return res.status(401).send({message: 'Unauthorized Access'})
+//   }
+//   const token = authHeader.split(' ')[1];
+//   jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+//     if(err){
+//       return res.status(403).send({message: 'Your access is forbidden'});
+//     }
+//     req.decoded = decoded;
+//     // console.log('decoded', decoded);
+//     next()
+//   }) 
+// }
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.9bf1d.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -71,7 +71,7 @@ async function run(){
       const options = { upsert: true };
       const updateDoc = {
           $set: {
-              quantity: data.quantity,
+              ...data
           }
       };
       const result = await serviceCollection.updateOne(query, updateDoc, options);
@@ -84,7 +84,7 @@ async function run(){
       res.send(result);
     })
 
-    app.get('/items', verifyJWT, async(req, res) => {
+    app.get('/items', async(req, res) => {
       // const decodedEmail = req.decoded.email;
       const email = req.query.email;
       // if(email === decodedEmail){
