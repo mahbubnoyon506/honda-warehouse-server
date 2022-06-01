@@ -72,12 +72,7 @@ async function run(){
       const options = {upsert: true};
       const updateDoc = {
         $set: {
-          // name: data.name,
-          // img: data.img,
-          // price: data.price,
-          quantity: data.quantity,
-          // suppliar: data.suppliar,
-          // description: data.description  
+          quantity: data.quantity, 
         }
       };
       const result = await productsCollection.updateOne(query, updateDoc, options);
