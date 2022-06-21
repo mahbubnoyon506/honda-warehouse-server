@@ -39,8 +39,11 @@ async function run(){
    try{
     app.get('/products', async(req, res) => {
       const query = {};
+      const limit = Number(req.query.limit);
+      const pageNumber = Number(req.query.pageNumber)
+      console.log(pageNumber)
       const cursor = productsCollection.find(query);
-      const result = await cursor.toArray()
+      const result = await cursor.skip(limit*pageNumber).limit(limit).toArray()
       res.send(result);
     })
      
