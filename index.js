@@ -41,10 +41,10 @@ async function run(){
       const query = {};
       const limit = Number(req.query.limit);
       const pageNumber = Number(req.query.pageNumber)
-      console.log(pageNumber)
       const cursor = productsCollection.find(query);
+      const count = await productsCollection.estimatedDocumentCount()
       const result = await cursor.skip(limit*pageNumber).limit(limit).toArray()
-      res.send(result);
+      res.send({success: true, data: result, count});
     })
      
     app.get('/products/:id', async(req, res) => {
